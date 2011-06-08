@@ -3,13 +3,8 @@ filetype on
 filetype plugin indent on
 syntax on
 
-" turn on manager for vim plugins
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
 set nocompatible
 set t_Co=256
-colorscheme xoria256
 
 set backspace=indent,eol,start
 set history=1000
@@ -60,8 +55,6 @@ set mouse=a
 set fo=1
 set laststatus=2
 set statusline=[%n]\ %<%f%m%r
-set statusline+=\ [%{GitBranch()}]
-set statusline+=\ %{exists('g:loaded_rvm')?rvm#statusline():''}
 set statusline+=%w\ %y\ <%{&fileformat}>%\=[%o]\ %l,%c%V\/%L\ \ %P
 
 " Command-T configuration
@@ -105,12 +98,6 @@ nmap <silent> <F2> :set invpaste<CR>:set paste?<CR>
 nmap <silent> <F3> :set invlist<CR>:set list?<CR>
 nmap <silent> <F4> :set invwrap<CR>:set wrap?<CR>
 nmap <silent> <F5> :set invhls<CR>:set hls?<CR>
-nmap <silent> <F6> :TlistToggle<CR>
-let NERDTreeIgnore=['\.rbc$', '\~$']
-nmap <silent> <F7> :NERDTreeToggle<cr>
-nmap <silent> <F8> :shell<cr>
-nmap <silent> <F9> :Project<CR>
-nmap <silent> <F12> \C
 
 " select all text - doesn't work with tmux
 map <C-a> ggVG
@@ -155,7 +142,6 @@ map 9 :tabn 9<CR>
 
 " Stop using <Insert>
 nnoremap a <Insert>
-nnoremap <Insert> \
 
 " double 'a' as escape
 imap <silent> aa <ESC>
@@ -168,15 +154,6 @@ inoremap <C-UP> <Esc>:m-2<CR>==gi
 vnoremap <C-DOWN> :m'>+<CR>gv=gv
 vnoremap <C-UP> :m-2<CR>gv=gv
 
-" NERDCommenter
-" invert comment
-map <C-x> \ci
-
-" RGrep
-map <C-f> :Rgrep<CR>
-au FileType qf nmap <buffer> <cr> <cr><c-w><c-p>
-let Grep_Skip_Files = '*.bak *~ *tags'
-let Grep_Skip_Dirs = '.git .svn'
 
 function s:setupWrapping()
   set wrap
@@ -189,10 +166,6 @@ function s:setupMarkup()
   map <buffer> <Leader>p :Mm <CR>
 endfunction
 
-" Gitv
-nnoremap <C-g> :Gitv<CR>
-inoremap <C-g> :Gitv<CR>
-vnoremap <C-g> :Gitv<CR>
 
 " make uses real tabs
 au FileType make set noexpandtab
@@ -214,31 +187,7 @@ au BufNewFile,BufRead *.rdoc set ft=rdoc
 " Make python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
 au FileType python  set tabstop=4 textwidth=79
 
-" gnome command line hacks ;)
-" http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
-if has("autocmd")
-  au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
-  au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
-  au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape iblock"
-endif
 
-" Enable syntastic syntax checking
-let g:syntastic_enable_signs=1
-let g:syntastic_quiet_warnings=1
-
-" Taglist
-let Tlist_Enable_Fold_Column=0
-let Tlist_Compact_Format=1
-let Tlist_Show_Menu=0
-nnoremap <C-]> g<C-]>
-
-"nnoremap <C-TAB> <C-x><C-w>
-
-" Project
-let $PROJECT_HOME='~/projects'
-" Use modeline overrides
-set modeline
-set modelines=10
 
 " Trailing whitespace remove on save
 autocmd BufWritePre *.rb,*.py,*.c,*.h,*.feature,*.conf,*rc,README,CHANGELOG,README.* :%s/\s\+$//e
@@ -250,7 +199,3 @@ function MyTagContext()
   " no return will result in the evaluation of the next
   " configured context
 endfunction
-
-let g:SuperTabCompletionContexts = ['MyTagContext', 's:ContextText', 's:ContextDiscover']
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
